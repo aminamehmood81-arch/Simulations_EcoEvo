@@ -114,3 +114,12 @@ adults. Each individual has the same survival chance in both, but in a small
 population a few unlucky deaths or failed breeding attempts can remove
 everyone. In a large population, good and bad luck almost cancel each other out.
 
+# Development Diary
+
+## 2026-11-22 20:15
+I ran local test, job 1 and observed 40% of runs starting with 3 adults went extinct.
+Claude made me predict before analysing the HPC results and I predicted if My local test (40 runs) gave 40% extinction from 3 adults. With 800 runs per size I expect roughly: 3 adults: 60%, 10 adults: 30%, 30 adults: 10%, 100 adults: 5%. And, the reason might be that big population balances out the luck, lucky and unlucky individuals cancel each other out. A small population doesn’t have enough individuals to do that, so a few unlucky deaths can wipe it out.
+After HPC runs these are the results I got. Results (800 runs per size):3 adults: 40.6%, 10: 6.2%, 30: 0.1%,
+100: 0%. 
+Compared with my prediction: right direction, but extinction fell much faster than I expected. This might be because the larger number of runs produced more possibilities even that the probability fell down to zero in 100 adults population. 
+I am still working on my code for right figure generation, that's why I am not comitting nay of these today.
