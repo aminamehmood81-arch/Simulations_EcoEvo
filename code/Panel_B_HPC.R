@@ -1,0 +1,33 @@
+# Panel_B_HPC.R
+# Author: Amina Mehmood
+# One HPC job: 40 stochastic simulations for each starting size (3, 10, 30, 100 adults),
+# 120 time steps each. Saves the results to an .rda file named after the job number.
+
+# 1. Load the model. On the HPC use the full path; on my laptop use the project path.
+on_hpc <- Sys.getenv("PBS_ARRAY_INDEX") != ""
+if (on_hpc) {
+  source("/rds/general/user/am9726/home/run_files/Demographic.R")
+} else {
+  source("code/Demographic.R")
+}
+
+# 2. Job number = seed, so every job uses different random numbers
+job_number <- if (on_hpc) as.numeric(Sys.getenv("PBS_ARRAY_INDEX")) else 1
+set.seed(job_number)
+
+# 3. Settings from the brief
+initial_sizes <- c(3, 10, 30, 100)
+n_sims        <- 40
+n_steps       <- 120
+
+# 4. Run the simulations: one table (121 rows x 40 columns) per starting size
+results <- list()
+for (N in initial_sizes) {
+  results[[as.character(N)]] <- replicate(n_sims,
+    stochastic_simulation(c(0, 0, 0, N), growth_matrix, reproduction_matrix,
+                          clutch_distribution, n_steps))
+}
+
+# 5. Save, with a different file name for each job
+save(results, initial_sizes, job_number,
+     file = paste0("panel_b_job_", job_number, ".rda"))
