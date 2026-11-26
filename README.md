@@ -180,3 +180,34 @@ storage on the compute node and doesn't overload the shared drive.
 `arrows`, `legend`, `par`), `$TMPDIR` and the `.e`/`.o` files, and helped me
 check word counts for the caption. I made the design decisions for the figure
 myself.
+
+## 2026-11-26
+
+**Started Part 2: neutral model.** The community is one vector. Each entry is
+one individual and the number is its species. The community size J never
+changes, because every death is followed by one birth.
+
+**How one neutral step works:** one random individual dies (1/J chance each),
+another individual (not the dead one) is the parent (1/(J-1) chance each).
+The baby copies the parent's species with probability 1 - nu, or becomes a
+new species with probability nu. J/2 steps = one generation. 
+
+**My design decisions:**
+- New species label = biggest number in the community + 1. A label can be
+  reused after its species goes extinct, but this doesn't matter because
+  richness and octaves only count species that are present now.
+- Panel a needs 201 values (generation 0 plus 200 generations), like the
+  121 rows in Part 1.
+- Panel b shows the average octaves after burn-in, not one snapshot, because
+  the community keeps wobbling around equilibrium.
+
+
+Few Modifications in Plan: one function to
+make any starting community, one step function (death, replacement,
+speciation), one generation function, then richness for panel a. I will
+choose burn-in by looking at panel a.
+
+Prediction: starting from max richness, richness will fall, because rare
+species die out by drift. Starting from min richness, it will rise, because
+speciation adds new species. Both should end up wobbling around the same level.
+
